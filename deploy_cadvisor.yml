@@ -1,0 +1,30 @@
+---
+- name: 使用 Ansible 檢查與管理 Docker Containers
+  hosts: target_servers  # 這裡填入你在 Inventory 裡的伺服器名稱
+  become: yes            # 通常操作 Docker 需要 root 權限
+
+  tasks:
+    # 1. 啟動或確保第一個 Container 正常運行 (例如一個 Nginx 網頁伺服器)
+    - name: 確保 Web Container 正在執行
+      community.docker.docker_container:
+        name: my_web_app
+        image: nginx:latest
+        state: started
+
+    # 2. 啟動或確保第二個 Container 正常運行 (例如一個 Redis 資料庫)
+    - name: 確保 DB Container 正在執行
+      community.docker.docker_container:
+        name: my_db_app
+        image: redis:latest
+        state: started
+
+    # 3. 取得特定 Container 的詳細狀態 (這就是一種監控行為)
+    - name: 獲取 Web Container 的當前狀態資訊
+      community.docker.docker_container_info:
+        name: my_web_app
+      register: web_status
+
+    # 4. 將狀態印在螢幕上給你確認
+    - name: 顯示 Web Container 狀態
+      debug:
+        msg: "目前狀態: {{ web_status.container.State.Status }} / 是否正在重啟: {{ web_status.container.State.Restarting }}"

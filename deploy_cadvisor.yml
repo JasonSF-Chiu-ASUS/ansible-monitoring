@@ -1,6 +1,6 @@
 ---
 - name: 使用 Ansible 檢查與管理 Docker Containers
-  hosts: target_servers  # 這裡填入你在 Inventory 裡的伺服器名稱
+  hosts: all # 這裡填入你在 Inventory 裡的伺服器名稱
   become: yes            # 通常操作 Docker 需要 root 權限
 
   tasks:
